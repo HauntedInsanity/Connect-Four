@@ -18,8 +18,8 @@ def create_board(columns, rows):
 # Takes a board list as a parameter and prints it in a way
 # that makes it look more like an actual connect four game
 def print_board(board):
+    print()
     for r in range(0, len(board)):
-        cell_space = 3
         # Print the column numbers along the top
         if r == 0:
             column_num = " "
@@ -69,7 +69,7 @@ def play(board, turn, needed_to_win):
             # Recursive restart
             play(board, turn, needed_to_win)
 
-    # Check for a win
+    # Create lists containing the pieces in different formations, to be used to check for wins in the end.
     '''
     *
      *
@@ -166,28 +166,62 @@ def play(board, turn, needed_to_win):
         piece_r += 1
     # print("Vertical:", "".join(vertical))
 
-    # Check for wins within the lists
+    # Check for wins
+    win = False
     if turn * needed_to_win in "".join(horizontal):
+        if not win:
+            print_board(board)
         print(turn, "gets a horizontal win!")
-        return
+        win = True
     elif turn * needed_to_win in "".join(vertical):
+        if not win:
+            print_board(board)
         print(turn, "gets a vertical win!")
-        return
+        win = True
     elif turn * needed_to_win in "".join(increasing):
         print(turn, "gets an increasing diagonal win!")
-        return
+        if not win:
+            print_board(board)
+        win = True
     elif turn * needed_to_win in "".join(decreasing):
         print(turn, "gets a decreasing diagonal win!")
+        if not win:
+            print_board(board)
+        win = True
+
+    # Return after printing each type of win
+    if win:
         return
 
+    # The tie check should happen after a check for wins
+    # since the board could be completely full as a player wins
+
+    # Check for a tie if the piece that was just placed was within the top row
+    if placed_row == 0:
+        # Assume the top row is filled until proven otherwise
+        top_filled = True
+        # Iterate through the top row
+        for i in range(len(board[0])):
+            # If there is an empty space, then a tie has not happened yet,
+            # and we can continue with the game
+            if board[0][i] == " ":
+                top_filled = False
+                break
+        # If top_filled remains True after a check was made, then a tie has occurred.
+        if top_filled:
+            print_board(board)
+            print("The game ends in a tie!")
+            return
+
     print_board(board)
+    # Swap the player's turns
     if turn == "X":
         play(board, "O", needed_to_win)
     else:
         play(board, "X", needed_to_win)
 
 
-# A standard Connect Four board is 6x7 (6 vertical and 7 horizontal)
+# A standard Connect Four board is 7x6 (7 horizontal and 6 vertical)
 standard = create_board(7, 6)
 print_board(standard)
 play(standard, "X", 4)
