@@ -173,17 +173,17 @@ def play(board, turn, needed_to_win):
             print_board(board)
         print(turn, "gets a horizontal win!")
         win = True
-    elif turn * needed_to_win in "".join(vertical):
+    if turn * needed_to_win in "".join(vertical):
         if not win:
             print_board(board)
         print(turn, "gets a vertical win!")
         win = True
-    elif turn * needed_to_win in "".join(increasing):
+    if turn * needed_to_win in "".join(increasing):
         print(turn, "gets an increasing diagonal win!")
         if not win:
             print_board(board)
         win = True
-    elif turn * needed_to_win in "".join(decreasing):
+    if turn * needed_to_win in "".join(decreasing):
         print(turn, "gets a decreasing diagonal win!")
         if not win:
             print_board(board)
