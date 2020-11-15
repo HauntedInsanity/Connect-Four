@@ -44,7 +44,7 @@ def print_board(board):
 
 
 # Gets valid user input and respond on the board
-def play(board, turn, needed_to_win):
+def play(board, turn, next_turn, needed_to_win):
     placement = input(turn + "'s turn. Please enter a column number: ")
     placed_row = -1
     # Check if the placement is numeric and within the board's size
@@ -54,7 +54,7 @@ def play(board, turn, needed_to_win):
     else:
         print("That is not a valid placement!")
         # Recursive restart
-        play(board, turn, needed_to_win)
+        play(board, turn, next_turn, needed_to_win)
 
     placement = int(placement) - 1
     # Place a piece in the bottom most row under the given column number
@@ -67,7 +67,7 @@ def play(board, turn, needed_to_win):
         if r == 0 and board[r][placement] != " ":
             print("There is no space in this column!\n")
             # Recursive restart
-            play(board, turn, needed_to_win)
+            play(board, turn, next_turn, needed_to_win)
 
     # Create lists containing the pieces in different formations, to be used to check for wins in the end.
     '''
@@ -215,18 +215,15 @@ def play(board, turn, needed_to_win):
 
     print_board(board)
     # Swap the player's turns
-    if turn == "X":
-        play(board, "O", needed_to_win)
-    else:
-        play(board, "X", needed_to_win)
+    play(board, next_turn, turn, needed_to_win)
 
 
 # A standard Connect Four board is 7x6 (7 horizontal and 6 vertical)
 standard = create_board(7, 6)
 print_board(standard)
-play(standard, "X", 4)
+play(standard, "X", "O", 4)
 
 # Testing limits
 # large = create_board(999, 999)
 # print_board(large)
-# play(large, "O", 2)
+# play(large, "O", "X", 2)
