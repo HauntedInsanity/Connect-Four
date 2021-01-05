@@ -9,11 +9,13 @@ YELLOW = (255, 255, 0)
 pygame.init()
 
 size = width, height = 1260, 1260
-# size = width, height = 100, 100
+
+# Get a size equivalent to the display's size
 # monitor_size = pygame.display.Info()
 # size = width, height = monitor_size.current_w, monitor_size.current_h - 50
 
 screen = pygame.display.set_mode(size)
+
 # Setting up font
 pygame.font.init()
 font = pygame.font.SysFont('calibri', int(width / 10) - 10)
@@ -72,7 +74,6 @@ def render_text(text, color, r_divider):
     label_rect = label.get_rect(center=(width / 2, r_divider / 2 + 10))
     screen.blit(label, label_rect)
     pygame.display.update()
-    pygame.time.wait(1000)
 
 
 def render_board(board, color, turn, next_turn, turn_color, next_turn_color):
@@ -103,7 +104,7 @@ def render_board(board, color, turn, next_turn, turn_color, next_turn_color):
                                    (int(c * c_divider + c_divider / 2),
                                     int(r * r_divider + r_divider + r_divider / 2)), radius)
             else:
-                pygame.draw.circle(screen, (0, 0, 0),
+                pygame.draw.circle(screen, BLACK,
                                    (int(c * c_divider + c_divider / 2),
                                     int(r * r_divider + r_divider + r_divider / 2)), radius)
     pygame.display.update()
@@ -149,7 +150,7 @@ def play(board, board_color, turn, next_turn, turn_color, next_turn_color, neede
 
                 # If the board is smaller than the screen size,
                 # the user can click on a placement that is outside of the list causing an index error.
-                if placement >= len(board[0]):
+                if placement >= len(board[0]) or board[0][placement] != " ":
                     # Continue the while loop by changing placement back to -1
                     placement = -1
                     continue
@@ -293,13 +294,13 @@ def play(board, board_color, turn, next_turn, turn_color, next_turn_color, neede
         if not win:
             print_board(board)
         print(turn, "gets an increasing diagonal win!")
-        render_text((turn + " gets an increasing diagonal win!"), turn_color, r_divider)
+        render_text((turn + " gets a diagonal win!"), turn_color, r_divider)
         win = True
     if turn * needed_to_win in "".join(decreasing):
         if not win:
             print_board(board)
         print(turn, "gets a decreasing diagonal win!")
-        render_text((turn + " gets a decreasing diagonal win!"), turn_color, r_divider)
+        render_text((turn + " gets a diagonal win!"), turn_color, r_divider)
         win = True
 
     # Return after printing each type of win
@@ -344,13 +345,3 @@ pygame.time.wait(3000)
 # print_board(large)
 # play(large, BLUE, "O", "X", RED, YELLOW, 2)
 
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             sys.exit()
-#         if event.type == pygame.MOUSEBUTTONDOWN:
-#             print(pygame.mouse.get_pos())
-#             pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 20)
-#
-#     # pygame.display.flip()
-#     pygame.display.update()
